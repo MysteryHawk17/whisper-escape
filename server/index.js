@@ -4,7 +4,7 @@ const port=process.env.PORT||5000
 const connectDB=require("./db/connect")
 const cors=require('cors')
 const bodyParser=require("body-parser")
-
+const authRoutes=require("./routes/authRoutes")
 //middlewares import
 app.use(cors({
     origin:["http://localhost:3000"]
@@ -16,6 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //routes import 
+app.use("/api/auth",authRoutes);
+
+
+
+
+//default server route
 app.get("/",(req,res)=>{
     res.status(200).json({message:"Chat server is working perfectly."})
 })
