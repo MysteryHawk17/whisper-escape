@@ -15,7 +15,7 @@ const Login = () => {
       email:email,
       password:password
     }
-    const data=await axios.post("https://whisperescape-api.vercel.app//api/auth/login",sendData);
+    const data=await axios.post("https://whisperescape-api.vercel.app/api/auth/login",sendData);
     console.log(data?.data?.status)
     if(data?.data?.status===404){
       alert("User Does not exist")
