@@ -30,7 +30,7 @@ const SignUp = () => {
           'content-type': 'multipart/form-data',
         },
       };
-      const response = await axios.post("http://localhost:5000/api/auth/register", formData, config)
+      const response = await axios.post("https://whisper-escape-api.vercel.app/api/auth/register", formData, config)
       if (response?.data?.status === 400) {
         alert("Fill in the details properly")
       }
