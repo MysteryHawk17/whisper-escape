@@ -7,7 +7,7 @@ const bodyParser=require("body-parser")
 const authRoutes=require("./routes/authRoutes")
 //middlewares import
 app.use(cors({
-    origin:["http://localhost:3000","https://whisperscape.vercel.app"]
+    origin:["http://localhost:3000","https://whisperscape.vercel.app","https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app","https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
 }))
 app.use(express.json());
 app.use(bodyParser.json()); 
