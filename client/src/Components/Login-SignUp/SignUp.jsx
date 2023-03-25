@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import axios from 'axios'
 
-
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 const SignUp = () => {
   const [show, setShow] = useState(false)
   const [cshow, setCshow] = useState(false)
@@ -32,16 +33,43 @@ const SignUp = () => {
       };
       const response = await axios.post("https://whisperescape-api.vercel.app/api/auth/register", formData, config)
       if (response?.data?.status === 400) {
-        alert("Fill in the details properly")
+        toast.warning("Please fill in the required field.",{
+          position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
       }
       else if (response?.data?.status === 500) {
-        alert("User already exists")
+        toast.error("User Already exist",{
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       }
       else if (response?.data?.status === 200) {
-        alert("User registered successfully. Please login.")
+        toast.success("User registered successfully. Please login!!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
       }
       else {
-        alert("Some error occured")
+        toast("Server error")
       }
 
 
@@ -158,7 +186,7 @@ const SignUp = () => {
       <Button width={'100%'} mt={10} bg={'blue.400'} color={'white'} _hover={'white'} onClick={handleClick}>
         Sign Up
       </Button>
-
+        <ToastContainer/>ai 
     </div>
   )
 }

@@ -3,32 +3,83 @@ import './style.css'
 import axios from 'axios'
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 const Login = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const [show, setShow] = useState(false)
-  const[email,setEmail]=useState('');
-  const[password,setPassword]=useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const handleShow = () => setShow(!show)
-  const handleClick=async()=>{
-    const sendData={
-      email:email,
-      password:password
+  const handleClick = async () => {
+    const sendData = {
+      email: email,
+      password: password
     }
     const data=await axios.post("https://whisperescape-api.vercel.app/api/auth/login",sendData);
     console.log(data?.data?.status)
-    if(data?.data?.status===404){
-      alert("User Does not exist")
+    if (data?.data?.status === 404) {
+      toast.error("User Does not exist",{
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      
     }
-    else if(data?.data?.status===400){
-      alert("Password is incorrect")
+    else if (data?.data?.status === 400) {
+      
+      toast.error("Password is incorrect.",{
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     }
-    else if(data?.status===500){
-      alert("Server error")
+    
+    else if(data?.data?.status===204)
+    {
+      toast.warning("Please fill in the required field.",{
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     }
-    else{
-      localStorage.setItem('loginData',JSON.stringify(data))
-      navigate("/chats")
+    else if(data?.data?.status===200) {
+    
+      localStorage.setItem('loginData', JSON.stringify(data))
+      toast.success("Login Successful!!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      setTimeout((
+        
+      )=>{navigate("/chats")},2000)
+      
+    }
+    else {
+      
+      toast("Server error")
     }
   }
   return (
@@ -44,15 +95,15 @@ const Login = () => {
           type='email'
           placeholder='Enter Your Email Address'
           value={email}
-          onChange={(e)=>{
+          onChange={(e) => {
             setEmail(e.target.value)
           }}
         />
       </InputGroup>
       <label htmlFor='passinp'
-      style={{
-        marginBottom:"10px"
-      }}
+        style={{
+          marginBottom: "10px"
+        }}
       >Password <span
         style={{
           color: 'red'
@@ -66,7 +117,7 @@ const Login = () => {
           type={show ? 'text' : 'password'}
           placeholder='Enter password'
           value={password}
-          onChange={(e)=>{
+          onChange={(e) => {
             setPassword(e.target.value)
           }}
         />
@@ -80,13 +131,14 @@ const Login = () => {
         Login
       </Button>
       <Button width={'100%'} mt={5} bg={'red'} color={'white'} _hover={'white'}
-      onClick={()=>{
-        setEmail("guest@gmail.com")
-        setPassword("password123")
-      }}
+        onClick={() => {
+          setEmail("guest@gmail.com")
+          setPassword("password123")
+        }}
       >
-       Get Guest User Credentials
+        Get Guest User Credentials
       </Button>
+      <ToastContainer />
     </div>
   )
 }

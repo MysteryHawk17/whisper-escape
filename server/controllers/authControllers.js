@@ -12,6 +12,7 @@ const createUser = async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         res.status(200).json({ message: "Fill in the details properly", status: 400 })
+        return;
     }
     const findUser = await userDB.findOne({ email: email })
     if (findUser) {
@@ -64,7 +65,8 @@ const createUser = async (req, res) => {
 const loginUser=async(req,res)=>{
     const{email,password}=req.body;
     if(!email||!password){
-        res.status(400).json({message:"Fill in the details properly",status:400})
+        res.status(200).json({message:"Fill in the details properly",status:204})
+        return; 
     }
     try {
         const findUser=await userDB.findOne({email:email})
@@ -79,7 +81,7 @@ const loginUser=async(req,res)=>{
                 })
                 const { password,createdAt,updatedAt, ...docs } = findUser.toObject();
                 console.log(docs)
-                res.status(200).json({message:"Successful Login",token:token,user:docs})
+                res.status(200).json({message:"Successful Login",token:token,user:docs,status:200})
             
             }
             else{
