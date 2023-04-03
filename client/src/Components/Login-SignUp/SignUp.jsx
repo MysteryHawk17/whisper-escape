@@ -154,7 +154,7 @@ const SignUp = () => {
       >
         <Input
           pr='4.5rem'
-          type={show ? 'text' : 'password'}
+          type={cshow ? 'text' : 'password'}
           placeholder='Reenter password'
           value={cpassword}
           onChange={(e) => {
@@ -163,7 +163,7 @@ const SignUp = () => {
         />
         <InputRightElement width='4.5rem'>
           <Button h='1.75rem' size='sm' onClick={handleCShow}>
-            {show ? 'Hide' : 'Show'}
+            {cshow ? 'Hide' : 'Show'}
           </Button>
         </InputRightElement>
       </InputGroup>
@@ -186,7 +186,7 @@ const SignUp = () => {
       <Button width={'100%'} mt={10} bg={'blue.400'} color={'white'} _hover={'white'} onClick={handleClick}>
         Sign Up
       </Button>
-        <ToastContainer/>ai 
+        <ToastContainer/>
     </div>
   )
 }
