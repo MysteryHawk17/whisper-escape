@@ -10,7 +10,7 @@ const checkLogin=async(req,res,next)=>{
             const decoded= jwt.verify(token,process.env.JWTSECRET);
             console.log(decoded.id);
             const user=await userDB.findById({_id:decoded.id})
-            console.log(user)
+            // console.log(user)
             const {password,createdAt,updatedAt,...others}=user._doc;
             req.user=others;
             next();

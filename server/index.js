@@ -10,6 +10,7 @@ const bodyParser=require("body-parser")
 const authRoutes=require("./routes/authRoutes")
 const userRoutes=require("./routes/userRoutes")
 const chatRoutes=require("./routes/chatRoutes")
+const messageRoutes=require("./routes/messageRoutes");
 //middlewares import
 app.use(cors({
     origin:["http://localhost:3000","https://whisperscape.vercel.app","https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app","https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
@@ -24,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/auth",authRoutes);
 app.use("/api/user",userRoutes);
 app.use("/api/chats",chatRoutes);
-
+app.use("/api/message",messageRoutes)
 
 
 //default server route

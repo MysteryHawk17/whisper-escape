@@ -13,7 +13,7 @@ const messageSchema=mongoose.Schema({
     },
     chatBelong:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Chats"
+        ref:"Chat"
     }
 },
 {

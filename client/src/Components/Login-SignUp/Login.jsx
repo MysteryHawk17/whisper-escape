@@ -17,50 +17,15 @@ const Login = () => {
       email: email,
       password: password
     }
-    const data=await axios.post("https://whisperescape-api.vercel.app/api/auth/login",sendData);
-    console.log(data?.data?.status)
-    if (data?.data?.status === 404) {
-      toast.error("User Does not exist",{
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      
-    }
-    else if (data?.data?.status === 400) {
-      
-      toast.error("Password is incorrect.",{
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    }
-    
-    else if(data?.data?.status===204)
-    {
-      toast.warning("Please fill in the required field.",{
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    }
-    else if(data?.data?.status===200) {
-    
+    const config = {
+      headers: {
+        'content-type': 'application/json',
+      },
+    };
+
+    try {
+      const data = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, sendData, config);
+      console.log(data)
       localStorage.setItem('loginData', JSON.stringify(data))
       toast.success("Login Successful!!", {
         position: "top-right",
@@ -73,13 +38,53 @@ const Login = () => {
         theme: "light",
       })
       setTimeout((
-        
-      )=>{navigate("/chats")},2000)
-      
-    }
-    else {
-      
-      toast("Server error")
+
+      ) => { navigate("/chats") }, 2000)
+
+    } catch (error) {
+      const { response } = error
+      console.log("Error")
+      console.log(response)
+      if (response.status === 404) {
+        toast.error("User Does not exist", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else if (response.status === 401) {
+
+        toast.error("Password is incorrect.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else if (response.status === 400) {
+        toast.warning("Please fill in the required field.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else if (response.status === 500) {
+        toast("Server error")
+      }
     }
   }
   return (

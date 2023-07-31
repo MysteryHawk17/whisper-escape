@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 const SignUp = () => {
   const [show, setShow] = useState(false)
   const [cshow, setCshow] = useState(false)
@@ -14,6 +15,7 @@ const SignUp = () => {
   const [file, setFile] = useState();
   const handleShow = () => setShow(!show)
   const handleCShow = () => setCshow(!cshow)
+  const navigate = useNavigate();
   const handleClick = async () => {
     if (password !== cpassword) {
       alert("Passwords entered does not match")
@@ -31,33 +33,10 @@ const SignUp = () => {
           'content-type': 'multipart/form-data',
         },
       };
-      const response = await axios.post("https://whisperescape-api.vercel.app/api/auth/register", formData, config)
-      if (response?.data?.status === 400) {
-        toast.warning("Please fill in the required field.",{
-          position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        })
-      }
-      else if (response?.data?.status === 500) {
-        toast.error("User Already exist",{
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      }
-      else if (response?.data?.status === 200) {
-        toast.success("User registered successfully. Please login!!", {
+      try {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, formData, config)
+        localStorage.setItem('loginData', JSON.stringify(response))
+        toast.success("User registered successfully", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: true,
@@ -67,14 +46,45 @@ const SignUp = () => {
           progress: undefined,
           theme: "light",
         })
-      }
-      else {
-        toast("Server error")
-      }
+        setTimeout((
 
+        ) => { navigate("/chats") }, 2000)
+        setName('')
+        setEmail('')
+        setPassword('')
+        setCpassword('')
+        setFile(null)
 
-      console.log(response);
-    }
+      } catch (error) {
+        if (error.response?.data?.statusCode === 400) {
+          toast.warning("Please fill in the required field.", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+        }
+        else if (error.response?.data?.statusCode === 401) {
+          toast.error("User Already exist", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          })
+        }
+        else if (error.response?.data?.statusCode === 500) {
+          toast("Server error")
+        }
+      }
+     }
   }
 
 
@@ -186,7 +196,7 @@ const SignUp = () => {
       <Button width={'100%'} mt={10} bg={'blue.400'} color={'white'} _hover={'white'} onClick={handleClick}>
         Sign Up
       </Button>
-        <ToastContainer/>
+      <ToastContainer />
     </div>
   )
 }
