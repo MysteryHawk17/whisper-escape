@@ -94,7 +94,6 @@ const createUser = asynchandler(async (req, res) => {
     response.successResponse(res, { token: token, user: savedUser }, "Saved the user successfully");
 })
 const loginUser = async (req, res) => {
-    console.log("here")
     const { email, password } = req.body;
     if (!email || !password) {
         response.validationError(res, 'Cannot login without proper information');
