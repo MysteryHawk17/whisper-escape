@@ -22,7 +22,7 @@ import { useState } from "react";
 import { ChatState } from "../../context/chatProvider";
 import GroupMemberItem from '../userComponents/GroupMemberItem'
 import UserListItem from "../userComponents/UserListItem";
-const UpdateGroupChat = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChat = ({ fetchAgain, setFetchAgain,fetchChats }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { selectedChat, setSelectedChat, loginInfo } = ChatState();
     const [groupChatName, setGroupChatName] = useState("");
@@ -141,6 +141,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain }) => {
                 progress: undefined,
                 theme: "light",
             })
+            setLoading(false);
             return;
         }
 
@@ -155,6 +156,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain }) => {
                 progress: undefined,
                 theme: "light",
             })
+            setLoading(false)
             return;
         }
         console.log(user)
@@ -237,7 +239,7 @@ const UpdateGroupChat = ({ fetchAgain, setFetchAgain }) => {
 
             loginInfo.user._id === user._id ? setSelectedChat() : setSelectedChat(response?.data?.data);
             setFetchAgain(!fetchAgain);
-
+            fetchChats()
         } catch (error) {
             if (error.response.status === 401) {
                 localStorage.removeItem("loginData");

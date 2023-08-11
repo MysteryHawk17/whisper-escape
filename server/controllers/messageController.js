@@ -11,6 +11,7 @@ const test = asynchandler(async (req, res) => {
 //create a message
 const createMessage = asynchandler(async (req, res) => {
     const { chatId, content } = req.body;
+    console.log(req.body)
     if (!chatId || !content) {
         return response.validationError(res, 'Cannot create a message without the details');
     }
@@ -57,7 +58,7 @@ const getAllChatMessages=asynchandler(async(req,res)=>{
     if (!findMessages) {
         return response.internalServerError(res, 'Cannot find the message');
     }
-    response.successResponse(res, findMessages, 'message sent successfully');
+    response.successResponse(res, findMessages, 'message fetched successfully');
 })
 
 
