@@ -11,7 +11,6 @@ const test = asynchandler(async (req, res) => {
 //create a message
 const createMessage = asynchandler(async (req, res) => {
     const { chatId, content } = req.body;
-    console.log(req.body)
     if (!chatId || !content) {
         return response.validationError(res, 'Cannot create a message without the details');
     }
