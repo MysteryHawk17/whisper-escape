@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import { useNavigate } from 'react-router-dom';
 import { ChatState } from '../../context/chatProvider';
 import SideDrawer from '../../Components/chatPage/SideDrawer';
@@ -7,14 +7,10 @@ import MyChats from '../../Components/chatPage/MyChats';
 import { Box } from '@chakra-ui/react';
 
 const Chats = () => {
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("loginData"));
-  //   if (user) navigate("/chats");
-  //   else navigate('/')
-  // }, [navigate])
+
   console.log("At the chat page")
   const { loginInfo } = ChatState();
+  const [fetchAgain, setFetchAgain] = useState(false);
   return (
     <div style={{ width: "100" }} >
       {loginInfo && <SideDrawer />}
@@ -27,8 +23,8 @@ const Chats = () => {
         h="91.5vh"
         p="10px"
       >
-        {loginInfo && <MyChats />}
-        {loginInfo && <ChatBox />}
+        {loginInfo && <MyChats fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />}
+        {loginInfo && <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />}
       </Box>
     </div>
   )

@@ -17,11 +17,11 @@ const checkLogin=async(req,res,next)=>{
         } catch (error) {
             
             console.log(error)
-            res.status(400).json({message:"User not authorized"})
+            res.status(401).json({message:"User not authorized"})
         }
     }
     else{
-        res.status(400).json({message:"User not authorized"})
+        res.status(401).json({message:"User not authorized"})
     }
 }
 const checkAdmin=async(req,res,next)=>{

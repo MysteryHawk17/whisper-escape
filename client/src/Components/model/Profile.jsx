@@ -1,21 +1,23 @@
-import { useDisclosure, IconButton,Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    Text
+import {
+  useDisclosure, IconButton, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  Text
 } from '@chakra-ui/react'
 import React from 'react'
 import { ViewIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-const Profile = ({user,children}) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+const Profile = ({ user, children }) => {
+  // console.log(user)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-   <>
-   {children ? (
+    <>
+      {children ? (
         <span onClick={onOpen}>{children}</span>
       ) : (
         <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
@@ -24,28 +26,28 @@ const Profile = ({user,children}) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
-          fontSize="40px"
-          fontFamily="Work Sans"
-          ml="2rem"
-        //   display='flex'
-        //   justifyContent='center'
+            fontSize="40px"
+            fontFamily="Work Sans"
+            ml="2rem"
+          //   display='flex'
+          //   justifyContent='center'
           >{user.name}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody display='flex' flexDirection="column"  alignItems='center'>
+          <ModalBody display='flex' flexDirection="column" alignItems='center'>
             <Image
-                borderRadius="full"
-                boxSize="150px"
-                src={user.image}
-                alt={user.name}
-                objectFit="cover"
-                mb='50px'
+              borderRadius="full"
+              boxSize="150px"
+              src={user.image}
+              alt={user.name}
+              objectFit="cover"
+              mb='50px'
 
             />
             <Text
-            fontSize={{bae:"28px",md:"30px"}}
-            fontFamily="Work Sans"
+              fontSize={{ bae: "28px", md: "30px" }}
+              fontFamily="Work Sans"
             >
-                Email: <span style={{fontStyle:"bold", fontWeight:"900",}}>{user.email}</span>
+              Email: <span style={{ fontStyle: "bold", fontWeight: "900", }}>{user.email}</span>
             </Text>
           </ModalBody>
 
@@ -56,7 +58,7 @@ const Profile = ({user,children}) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-   </>
+    </>
   )
 }
 

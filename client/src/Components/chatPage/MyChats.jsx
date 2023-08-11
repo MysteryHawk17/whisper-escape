@@ -8,9 +8,10 @@ import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from './ChatLoading'
 import { getSender } from '../logics/chatLogic';
-const MyChats = () => {
+import GroupChatModal from '../model/GroupChatModal';
+const MyChats = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
-  const { loginInfo, selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { loginInfo, selectedChat, setSelectedChat,chats, setChats } = ChatState();
   const fetchChats = async () => {
     try {
       const config = {
@@ -19,10 +20,25 @@ const MyChats = () => {
         }
       }
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/chats/fetchchats`, config)
-      console.log(response?.data?.data)
+      // console.log(response?.data?.data)
       setChats(response?.data?.data)
     }
     catch (e) {
+      // console.log(e.response.status)
+      if(e.response.status===401){
+        localStorage.removeItem("loginData");
+        toast.error("Token expired. Please login.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else{
       toast.error("Failed to load chats", {
         position: "top-right",
         autoClose: 2000,
@@ -34,16 +50,18 @@ const MyChats = () => {
         theme: "light",
       })
     }
+
+    }
   }
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("loginData")));
     fetchChats();
     // eslint-disable-next-line
-  }, []);
+  }, [fetchAgain]);
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
-      flexDir="column"
+      flexDirection="column"
       alignItems="center"
       p={3}
       bg="white"
@@ -52,7 +70,7 @@ const MyChats = () => {
       borderWidth="1px">
       <Box
         // border="10px solid red"
-        
+
         p={3}
         fontSize={{ base: "18px", md: "25px" }}
         fontFamily="Work sans"
@@ -62,19 +80,19 @@ const MyChats = () => {
         alignItems="center"
       >
         My Chats
-
-        <Button
-          d="flex"
-          fontSize={{ base: "15px", md: "10px", lg: "15px" }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
-
+        <GroupChatModal>
+          <Button
+            display="flex"
+            fontSize={{ base: "15px", md: "10px", lg: "15px" }}
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Box>
       <Box
-        d="flex"
-        flexDir="column"
+        display="flex"
+        flexDirection="column"
         p={3}
         bg="#F8F8F8"
         w="100%"
@@ -115,6 +133,7 @@ const MyChats = () => {
           <ChatLoading />
         )}
       </Box>
+      <ToastContainer />
     </Box>
   )
 }

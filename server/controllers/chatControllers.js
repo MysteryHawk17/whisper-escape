@@ -159,12 +159,12 @@ const removePeople = asynchandler(async (req, res) => {
         return response.notFoundError(res, 'Cannot find the chat');
     }
     const id = req.user._id;
-    if (findChat.groupAdmin.toString() !== id.toString() && id !== userId) {
-        return response.errorResponse(res, 'Only admin or the user itself can remove from group', 402)
-    }
-    if (!findChat.users.includes(userId)) {
-        return response.errorResponse(res, 'User does not exists in the group', 401);
-    }
+    // if (findChat.groupAdmin.toString() !== id.toString() && id !== userId) {
+    //     return response.errorResponse(res, 'Only admin or the user itself can remove from group', 402)
+    // }
+    // if (!findChat.users.includes(userId)) {
+    //     return response.errorResponse(res, 'User does not exists in the group', 401);
+    // }
     const updatedChat = await chatDB.findByIdAndUpdate({ _id: chatId }, {
         $pull: { users: userId }
     }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password");
