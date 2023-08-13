@@ -12,10 +12,10 @@ const userRoutes = require("./routes/userRoutes")
 const chatRoutes = require("./routes/chatRoutes")
 const messageRoutes = require("./routes/messageRoutes");
 //middlewares import
-app.use(cors())
-// app.use(cors({
-//     origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
-// }))
+// app.use(cors())
+app.use(cors({
+    origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
+}))
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
