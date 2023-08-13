@@ -12,9 +12,10 @@ const userRoutes = require("./routes/userRoutes")
 const chatRoutes = require("./routes/chatRoutes")
 const messageRoutes = require("./routes/messageRoutes");
 //middlewares import
-app.use(cors({
-    origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
-}))
+app.use(cors())
+// app.use(cors({
+//     origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
+// }))
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,13 +48,18 @@ const server = app.listen(port, () => {
 })
 
 
+// const io = require('socket.io')(server, {
+//     pingTimeout: 60000,
+//     cors: {
+//         origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
+//     }
+// })
 const io = require('socket.io')(server, {
     pingTimeout: 60000,
     cors: {
-        origin: ["http://localhost:3000", "https://whisperscape.vercel.app", "https://whisper-escape-t3v5-git-main-mysteryhawk17.vercel.app", "https://whisper-escape-t3v5-mysteryhawk17.vercel.app"]
+        origin: "*"
     }
-})
-
+});
 
 io.on('connection', (socket) => {
     // console.log("Connected to socket.io")    
@@ -66,29 +72,6 @@ io.on('connection', (socket) => {
         socket.join(room);
         console.log("User joined room:", room);
     });
-    // socket.on("typing", (room, info) => {
-    //     console.log(room);
-    //     const members = room.users;
-    //     console.log(members)
-    //     members.forEach((user) => {
-    //         if (user._id == info._id) return
-    //         socket.in(room).emit("typing")
-    //     })
-    //     // console.log(info);
-    //     socket.in(room).emit("typing")
-    // });
-    // socket.on("stop typing", (room, info) => {
-    //     // console.log(room);
-    //     // console.log(info);
-    //     // const members = room.users;
-    //     // console.log(members)
-    //     // members.forEach((user) => {
-    //     //     if (user._id == info._id) return
-    //     //     // socket.in(room).emit("typing")
-    //     //     socket.in(room).emit("stop typing")
-    //     // })
-    //     socket.in(room).emit("stop typing")
-    // });
     socket.on("typing", (room) => {
         socket.in(room).emit("typing")
     });

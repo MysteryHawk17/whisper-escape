@@ -28,11 +28,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket = io(ENDPOINT);
     socket.emit('setup', loginInfo?.user)
     socket.on('connected', () => {
-      // console.log("connected to socket")
+      console.log("connected to socket")
       setSocketConnected(true)
     })
     socket.on("typing", () => { setisTyping(true) });
     socket.on("stop typing", () => { setisTyping(false) });
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, [])
 
   const sendMessage = async (event) => {
