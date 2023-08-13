@@ -24,7 +24,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false)
   const [isTyping, setisTyping] = useState()
-  
+
   const fetchChats = async () => {
     if (!selectedChat) {
       return
@@ -123,23 +123,23 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   }
   useEffect(() => {
-    socket = io(ENDPOINT);//change
-    console.log(ENDPOINT)
+    socket = io(ENDPOINT);
     //all code outside
     socket.emit('setup', loginInfo?.user)
     socket.on('connected', () => {
       console.log("connected to socket")
       setSocketConnected(true)
-      
-      socket.on("typing", () => { setisTyping(true) });
-      socket.on("stop typing", () => { setisTyping(false) });
+
+
     })
+    socket.on("typing", () => { setisTyping(true) });
+    socket.on("stop typing", () => { setisTyping(false) });
     // return () => {
     //   socket.disconnect();
     // };
-  }, [])
- 
- 
+  })
+
+
   useEffect(() => {
     fetchChats()
     selectedChatCompare = selectedChat;
