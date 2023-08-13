@@ -57,7 +57,7 @@ const server = app.listen(port, () => {
 //     }
 // })
 const io = require('socket.io')(server, {
-    pingTimeout: 60000,
+    // pingTimeout: 60000,
     cors: {
         origin: true,
         credentials: true
@@ -93,10 +93,10 @@ io.on('connection', (socket) => {
             socket.in(user._id).emit("message recieved", newMessageRecieved)
         });
     })
-    socket.off("setup", (userData) => {
-        console.log('Disconnected')
-        socket.leave(userData._id)
-    })
+    // socket.off("setup", (userData) => {
+    //     console.log('Disconnected')
+    //     socket.leave(userData._id)
+    // })
 })
 
 
