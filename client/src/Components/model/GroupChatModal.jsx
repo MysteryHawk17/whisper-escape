@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
     Box,
     useDisclosure,
-    IconButton,
+    // IconButton,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -13,11 +13,11 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    Text,
+    // Text,
     FormControl,
     Input
 } from '@chakra-ui/react'
-import { AddIcon } from "@chakra-ui/icons";
+// import { AddIcon } from "@chakra-ui/icons";
 import { ChatState } from '../../context/chatProvider';
 import UserListItem from '../userComponents/UserListItem'
 import ChatLoading from '../chatPage/ChatLoading'

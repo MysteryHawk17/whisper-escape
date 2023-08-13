@@ -11,8 +11,10 @@ import { getSender } from '../logics/chatLogic';
 import GroupChatModal from '../model/GroupChatModal';
 const MyChats = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
+  const [loading,setLoading]=useState(false);
   const { loginInfo, selectedChat, setSelectedChat,chats, setChats } = ChatState();
   const fetchChats = async () => {
+    setLoading(true)
     try {
       const config = {
         headers: {
@@ -51,6 +53,10 @@ const MyChats = ({fetchAgain}) => {
       })
     }
 
+
+    }
+    finally{
+      setLoading(false);
     }
   }
   useEffect(() => {
@@ -102,7 +108,7 @@ const MyChats = ({fetchAgain}) => {
       >
         {chats ? (
           <Stack overflowY="scroll">
-            {chats?.map((chat) => (
+            {loading?<ChatLoading/>:chats?.map((chat) => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
