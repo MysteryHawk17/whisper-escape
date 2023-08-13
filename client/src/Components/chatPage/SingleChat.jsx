@@ -25,7 +25,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false)
   const [isTyping, setisTyping] = useState()
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io.connect(ENDPOINT);
     socket.emit('setup', loginInfo?.user)
     socket.on('connected', () => {
       console.log("connected to socket")
