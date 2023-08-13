@@ -1,6 +1,11 @@
 # Chat Application
 
-This is a chat application that allows users to create and manage one-to-one chats and group conversations. The application was developed using React Js, Node.js, Express.js, Context API and socket.io for efficient data handling.
+This is a chat application that allows users to create and manage one-to-one chats and group conversations. The application was developed using
+
+- React Js with Chakra UI for User Interface,
+- Node.js and Express.js for backend structure,
+- Context API for efficient state management
+- Socket.io for efficient real time communication.
 
 ## Features
 
