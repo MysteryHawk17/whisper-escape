@@ -37,6 +37,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         console.log(response)
 
         setMessages([...messages, response?.data?.data])
+        // setFetchAgain(!fetchAgain)
       } catch (error) {
         console.log(error)
         if (error.response.status === 401) {
