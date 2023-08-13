@@ -24,23 +24,53 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false)
   const [isTyping, setisTyping] = useState()
-  useEffect(() => {
-    socket = io.connect(ENDPOINT);//change
-    console.log(ENDPOINT)
-    //all code outside
-    socket.on('connected', () => {
-      console.log("connected to socket")
-      setSocketConnected(true)
-      socket.emit('setup', loginInfo?.user)
-      
-      socket.on("typing", () => { setisTyping(true) });
-      socket.on("stop typing", () => { setisTyping(false) });
-    })
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, [])
-
+  
+  const fetchChats = async () => {
+    if (!selectedChat) {
+      return
+    }
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${loginInfo.token}`
+        }
+      }
+      setLoading(true);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/message/getallchatmessages/${selectedChat._id}`, config);
+      console.log(response?.data)
+      setMessages(response?.data?.data)
+      setLoading(false);
+      socket.emit('join chat', selectedChat._id)
+    } catch (error) {
+      setLoading(false);
+      if (error.response.status === 401) {
+        // localStorage.removeItem("loginData");
+        toast.error("Token expired. Please login.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else {
+        toast.error("Failed to load chats", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }
+  }
   const sendMessage = async (event) => {
     if (event.key === 'Enter' && newMessage) {
       // console.log("here")
@@ -92,6 +122,43 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   }
+  useEffect(() => {
+    socket = io(ENDPOINT);//change
+    console.log(ENDPOINT)
+    //all code outside
+    socket.emit('setup', loginInfo?.user)
+    socket.on('connected', () => {
+      console.log("connected to socket")
+      setSocketConnected(true)
+      
+      socket.on("typing", () => { setisTyping(true) });
+      socket.on("stop typing", () => { setisTyping(false) });
+    })
+    // return () => {
+    //   socket.disconnect();
+    // };
+  }, [])
+ 
+ 
+  useEffect(() => {
+    fetchChats()
+    selectedChatCompare = selectedChat;
+  }, [selectedChat])
+
+  useEffect(() => {
+    socket.on('message recieved', (newMessageRecieved) => {
+      setFetchAgain(!fetchAgain)
+      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chatBelong._id) {
+        //give notification
+        console.log('hererere')
+      }
+      else {
+        console.log('first')
+        setMessages([...messages, newMessageRecieved])
+        // console.log(messages)
+      }
+    })
+  })
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
     if (e.target.value === '') {
@@ -118,72 +185,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }, timer)
 
   }
-  const fetchChats = async () => {
-    if (!selectedChat) {
-      return
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${loginInfo.token}`
-        }
-      }
-      setLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/message/getallchatmessages/${selectedChat._id}`, config);
-      console.log(response?.data)
-      setMessages(response?.data?.data)
-      setLoading(false);
-      socket.emit('join chat', selectedChat._id)
-    } catch (error) {
-      setLoading(false);
-      if (error.response.status === 401) {
-        // localStorage.removeItem("loginData");
-        toast.error("Token expired. Please login.", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
-      }
-      else {
-        toast.error("Failed to load chats", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
-      }
-    }
-  }
-  useEffect(() => {
-    fetchChats()
-    selectedChatCompare = selectedChat;
-  }, [selectedChat])
-
-  useEffect(() => {
-    socket.on('message recieved', (newMessageRecieved) => {
-      setFetchAgain(!fetchAgain)
-      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chatBelong._id) {
-        //give notification
-        console.log('hererere')
-      }
-      else {
-        console.log('first')
-        setMessages([...messages, newMessageRecieved])
-        // console.log(messages)
-      }
-    })
-  })
-
   // console.log(loginInfo.user)
   return (
     <>
