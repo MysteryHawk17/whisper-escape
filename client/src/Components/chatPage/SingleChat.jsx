@@ -25,15 +25,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false)
   const [isTyping, setisTyping] = useState()
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io.connect(ENDPOINT);//change
     console.log(ENDPOINT)
-    socket.emit('setup', loginInfo?.user)
+    //all code outside
     socket.on('connected', () => {
       console.log("connected to socket")
       setSocketConnected(true)
+      socket.emit('setup', loginInfo?.user)
+      
+      socket.on("typing", () => { setisTyping(true) });
+      socket.on("stop typing", () => { setisTyping(false) });
     })
-    socket.on("typing", () => { setisTyping(true) });
-    socket.on("stop typing", () => { setisTyping(false) });
     // return () => {
     //   socket.disconnect();
     // };
