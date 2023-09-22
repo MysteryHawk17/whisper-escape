@@ -11,6 +11,12 @@ const authRoutes = require("./routes/authRoutes")
 const userRoutes = require("./routes/userRoutes")
 const chatRoutes = require("./routes/chatRoutes")
 const messageRoutes = require("./routes/messageRoutes");
+
+//UPDATES HERE
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer, {
+  cors: { origin: "*" },
+});
 //middlewares import
 app.use(cors({
     origin:"*"
@@ -44,7 +50,7 @@ connectDB();
 
 
 //listening to server
-
+/*
 const server = app.listen(port, () => {
     console.log(`Server is listening on port ${port}`)
 })
@@ -99,6 +105,44 @@ io.on('connection', (socket) => {
     // })
 })
 
+*/
 
+//CHANGES HERE
+io.on('connection', (socket) => {
+    // console.log("Connected to socket.io")    
+    socket.on('setup', (userData) => {
+        socket.join(userData._id);
+        console.log(userData._id)
+        socket.emit('connected')
+    })
+    socket.on("join chat", (room) => {
+        socket.join(room);
+        console.log("User joined room:", room);
+    });
+    socket.on("typing", (room) => {
+        socket.in(room).emit("typing")
+    });
+    socket.on("stop typing", (room) => {
+         socket.in(room).emit("stop typing")
+    });
 
+    socket.on("send message", (newMessageRecieved) => {
+        var chat = newMessageRecieved.chatBelong;
+        // console.log(newMessageRecieved)
+        if (!chat.users) { return console.log("Chat.user not defined") }
+        chat.users.forEach(user => {
+            if (user._id === newMessageRecieved.sender._id) {
+                return
+            }
+            socket.in(user._id).emit("message recieved", newMessageRecieved)
+        });
+    })
+    // socket.off("setup", (userData) => {
+    //     console.log('Disconnected')
+    //     socket.leave(userData._id)
+    // })
+})
 
+httpServer.listen(port, () => {
+  console.log(`Server is running on port ${port}.`);
+});
