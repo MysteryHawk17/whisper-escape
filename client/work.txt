@@ -1,2 +1,0 @@
-create different paths for /=home 
-/chats=chats

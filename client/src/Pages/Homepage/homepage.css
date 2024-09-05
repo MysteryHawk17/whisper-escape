@@ -36,3 +36,17 @@
     background-color: rgb(245, 245, 199);
    
 }
+
+@media screen and (max-width: 768px){
+    .title h2{
+        font-size: 1.5rem;
+    }
+    .title{
+        height: 3.5rem;
+        width: 80%;
+    }
+    .components{
+        width: 90%;
+    }
+    
+}
