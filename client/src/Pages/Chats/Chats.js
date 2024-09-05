@@ -19,7 +19,7 @@ const Chats = () => {
         margin="10px auto"
         display="flex"
         justifyContent="space-between"
-        w="80%"
+        w="90%"
         h="91.5vh"
         p="10px"
       >
